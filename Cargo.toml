@@ -1,8 +1,30 @@
 [package]
 name = "downloaderserv"
 version = "0.1.0"
+authors = ["Yahor Poresh"]
 edition = "2018"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+path = "src/main.rs"
+name = "downloaderserv"
+
 
 [dependencies]
+actix-web = "4.0.0-beta.4"
+config = "0.11.0"
+serde = { version = "1.0", features = ["derive"] }
+
+[dependencies.sqlx]
+version = "0.5.5"
+default-features = false
+features = [
+    "runtime-actix-rustls",
+    "macros",
+    "postgres",
+    "uuid",
+    "chrono",
+    "migrate"
+]
