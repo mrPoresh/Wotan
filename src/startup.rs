@@ -7,7 +7,7 @@ use std::net::TcpListener;
 use actix_web::{
 
     dev::Server,
-    web::{self, Data},
+    web::Data,
     App, HttpServer,
     middleware::Logger,
 
@@ -87,8 +87,8 @@ pub fn run(
     let server = HttpServer::new(move || {
         App::new()
             .wrap(Logger::default())
-            .data(db_pool.clone())
-            .data(ApplicationBaseUrl(base_url.clone()))
+            .app_data(db_pool.clone())
+            .app_data(ApplicationBaseUrl(base_url.clone()))
             .configure(route_config)
     })
     .listen(listener)?
