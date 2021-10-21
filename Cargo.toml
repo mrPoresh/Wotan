@@ -17,7 +17,11 @@ actix-web = "4.0.0-beta.4"
 config = "0.11.0"
 chrono = { version = "0.4", features = ["serde"] }
 serde = { version = "1.0", features = ["derive"] }
-uuid = { version = "0.8", features = ["serde"] }
+tracing = "0.1"
+tracing-futures = "0.2.5"
+tracing-log = "0.1"
+tracing-subscriber = "0.2"
+uuid = { version = "0.8", features = ["v4"] }
 
 [dependencies.sqlx]
 version = "0.5.5"

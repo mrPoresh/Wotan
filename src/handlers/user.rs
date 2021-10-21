@@ -1,8 +1,15 @@
 use actix_web::HttpResponse;
+use actix_web::web::{Json, Data};
+use sqlx::PgPool;
 
-pub async fn create_user() -> HttpResponse {
+use crate::db_manager::UserMenager;
+use crate::models::user::NewUser;
 
-    println!("Create user");
+pub async fn create_user(user: Json<NewUser>, pool: Data<PgPool>) -> HttpResponse {
+
+    let menager = UserMenager::new(pool.clone());
+
+    menager.create_user(user.0).await.unwrap();
 
     HttpResponse::Ok().finish()
 }
