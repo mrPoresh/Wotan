@@ -14,6 +14,7 @@ pub struct Settings {
 
     pub database: DatabaseSettings,
     pub application: ApplicationSettings,
+    pub crypto: CryptoSettings,
 
 }
 
@@ -35,6 +36,13 @@ pub struct ApplicationSettings {
     pub host: String,
     pub port: u16,
     pub base_url: String,
+
+}
+
+#[derive(serde::Deserialize, Clone, Debug)]
+pub struct CryptoSettings {
+
+    pub key: String,
 
 }
 

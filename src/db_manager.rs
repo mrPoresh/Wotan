@@ -6,13 +6,13 @@ use uuid::Uuid;
 use crate::models::user::NewUser;
 
 
-pub struct UserMenager {
+pub struct UserService {
 
     pool: web::Data<PgPool>
 
 }
 
-impl UserMenager {
+impl UserService {
 
     pub fn new(pool: web::Data<PgPool>) -> Self {
 

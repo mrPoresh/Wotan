@@ -1,8 +1,10 @@
-use crate::configuration::{Settings, DatabaseSettings};
+use crate::configuration::{DatabaseSettings, Settings};
 use crate::handlers::route_config;
+use crate::configuration::CryptoService;
 
 use sqlx::{postgres::PgPoolOptions, PgPool};
 use std::net::TcpListener;
+use std::sync::Arc;
 
 use actix_web::{
 
@@ -36,6 +38,10 @@ impl Application {
             configuration.application.host, configuration.application.port
         );
 
+        let crypto = get_crypto(configuration.crypto.key);
+
+        //println!("-- Secret key is --> {:?}", crypto.key);
+
         let listener = TcpListener::bind(&address)?;
         let port = listener.local_addr().unwrap().port();
 
@@ -43,6 +49,7 @@ impl Application {
             listener,
              connection_pool,
             configuration.application.base_url,
+            crypto,
             )?;
 
         Ok(Self { port, server })
@@ -74,21 +81,33 @@ pub async fn get_connection_pool(
 
 }
 
+pub fn get_crypto(crypto: String) -> CryptoService {
+
+    CryptoService {
+
+        key: Arc::new(crypto.clone())
+
+    }
+
+}
 
 pub fn run(
 
     listener: TcpListener, 
     db_pool: PgPool, 
     base_url: String,
+    crypto: CryptoService,
 
     ) -> Result<Server, std::io::Error> {
 
     let db_pool = Data::new(db_pool);
+    let crypto = Data::new(crypto);
 
     let server = HttpServer::new(move || {
         App::new()
             .wrap(Logger::default())
             .app_data(db_pool.clone())
+            .app_data(crypto.clone())
             .app_data(ApplicationBaseUrl(base_url.clone()))
             .configure(route_config)
     })

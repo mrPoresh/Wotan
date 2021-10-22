@@ -537,6 +537,7 @@ dependencies = [
  "actix-web",
  "chrono",
  "config",
+ "dotenv",
  "serde 1.0.130",
  "sqlx",
  "tracing",

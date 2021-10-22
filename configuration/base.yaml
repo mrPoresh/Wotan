@@ -8,3 +8,6 @@ database:
   password: "password"
   database_name: "dow_db"
   require_ssl: false
+
+crypto:
+  key: "Password-is-swordfish"

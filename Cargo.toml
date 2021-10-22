@@ -16,6 +16,7 @@ name = "downloaderserv"
 actix-web = "4.0.0-beta.4"
 config = "0.11.0"
 chrono = { version = "0.4", features = ["serde"] }
+dotenv = "0.15"
 serde = { version = "1.0", features = ["derive"] }
 tracing = "0.1"
 tracing-futures = "0.2.5"
