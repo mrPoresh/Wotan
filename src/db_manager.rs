@@ -2,7 +2,9 @@ use sqlx::PgPool;
 use sqlx::{Postgres, Transaction};
 use actix_web::{HttpResponse, web};
 use uuid::Uuid;
+use color_eyre::Result;
 
+use crate::configuration::CryptoService;
 use crate::models::user::NewUser;
 
 
@@ -22,26 +24,29 @@ impl UserService {
 
     pub async fn create_user(
         &self, 
-        new_user: NewUser
-    ) -> Result<HttpResponse, HttpResponse> {
+        new_user: NewUser,
+        hashing: &CryptoService,
+    ) -> Result<Uuid> {
+
+        let hash_password = hashing.hash_password(new_user.password.clone()).await?;
 
         let mut transaction = self.pool
             .begin()
             .await
-            .map_err(|_| HttpResponse::InternalServerError().finish())?;
+            .map_err(|_| HttpResponse::InternalServerError().finish()).unwrap();
 
-        let user_id = insert_user(&mut transaction, &new_user)
+        let user_id = insert_user(&mut transaction, &new_user, hash_password)
             .await
-            .map_err(|_| HttpResponse::InternalServerError().finish())?;
+            .map_err(|_| HttpResponse::InternalServerError().finish()).unwrap();
 
         transaction
             .commit()
             .await
-            .map_err(|_| HttpResponse::InternalServerError().finish())?;
+            .map_err(|_| HttpResponse::InternalServerError().finish()).unwrap();
 
         println!("-- User Uuid --> {}", user_id);
 
-        Ok(HttpResponse::Ok().finish())
+        Ok(user_id)
 
     }
     
@@ -50,6 +55,7 @@ impl UserService {
 pub async fn insert_user(
     transaction: &mut Transaction<'_, Postgres>,
     new_user: &NewUser,
+    password_hash: String,
 ) -> Result<Uuid, sqlx::Error> {
 
     let user_id = Uuid::new_v4();
@@ -62,7 +68,7 @@ pub async fn insert_user(
         user_id,
         new_user.username,
         new_user.email,
-        new_user.password
+        password_hash,
     )
     .execute(transaction)
     .await
