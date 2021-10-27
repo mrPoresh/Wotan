@@ -43,6 +43,7 @@ pub struct ApplicationSettings {
 pub struct CryptoSettings {
 
     pub key: String,
+    pub token_key: String,
 
 }
 

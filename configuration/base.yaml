@@ -11,3 +11,4 @@ database:
 
 crypto:
   key: "Password-is-swordfish"
+  token_key: "password"

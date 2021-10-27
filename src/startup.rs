@@ -38,7 +38,7 @@ impl Application {
             configuration.application.host, configuration.application.port
         );
 
-        let crypto = get_crypto(configuration.crypto.key);
+        let crypto = get_crypto(configuration.crypto.key, configuration.crypto.token_key);
 
         //println!("-- Secret key is --> {:?}", crypto.key);
 
@@ -81,11 +81,12 @@ pub async fn get_connection_pool(
 
 }
 
-pub fn get_crypto(crypto: String) -> CryptoService {
+pub fn get_crypto(key: String, token_key: String) -> CryptoService {
 
     CryptoService {
 
-        key: Arc::new(crypto.clone())
+        key: Arc::new(key.clone()),
+        token_key: Arc::new(token_key.clone()),
 
     }
 

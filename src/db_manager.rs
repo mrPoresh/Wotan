@@ -39,6 +39,8 @@ impl UserService {
             .await
             .map_err(|_| HttpResponse::InternalServerError().finish()).unwrap();
 
+        //let token = hashing.generate_jwt(user_id).await?;
+
         transaction
             .commit()
             .await
