@@ -9,7 +9,7 @@
       --url http://localhost:8000/auth/signup \
       --header 'content-type: application/json' \
       --data '{
-        "username": "user1",
-        "email": "user1@example.com",
+        "username": "user2",
+        "email": "user2@example.com",
         "password": "user1"
       }'

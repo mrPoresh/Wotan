@@ -1,8 +1,10 @@
 use actix_web::HttpResponse;
+use tracing::{info, instrument};
 
+#[instrument]
 pub async fn healthy_check() -> HttpResponse {
 
-    println!("Im here");
+    info!("Healthy check works!!!");
 
     HttpResponse::Ok().finish()
 }

@@ -744,6 +744,7 @@ dependencies = [
  "serde 1.0.130",
  "sqlx",
  "tracing",
+ "tracing-bunyan-formatter",
  "tracing-futures",
  "tracing-log",
  "tracing-subscriber",
@@ -979,6 +980,16 @@ checksum = "501466ecc8a30d1d3b7fc9229b122b2ce8ed6e9d9223f1138d4babb253e51817"
 dependencies = [
  "typenum",
  "version_check 0.9.3",
+]
+
+[[package]]
+name = "gethostname"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e692e296bfac1d2533ef168d0b60ff5897b8b70a4009276834014dd8924cc028"
+dependencies = [
+ "libc",
+ "winapi",
 ]
 
 [[package]]
@@ -2522,6 +2533,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "375a639232caf30edfc78e8d89b2d4c375515393e7af7e16f01cd96917fb2105"
 dependencies = [
  "cfg-if 1.0.0",
+ "log",
  "pin-project-lite",
  "tracing-attributes",
  "tracing-core",
@@ -2536,6 +2548,23 @@ dependencies = [
  "proc-macro2 1.0.29",
  "quote 1.0.10",
  "syn",
+]
+
+[[package]]
+name = "tracing-bunyan-formatter"
+version = "0.2.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c408910c9b7eabc0215fe2b4a89f8ec95581a91cea1f7619f7c78caf14cbc2a1"
+dependencies = [
+ "chrono",
+ "gethostname",
+ "log",
+ "serde 1.0.130",
+ "serde_json",
+ "tracing",
+ "tracing-core",
+ "tracing-log",
+ "tracing-subscriber",
 ]
 
 [[package]]

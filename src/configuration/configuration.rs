@@ -1,6 +1,8 @@
 use std::convert::{TryFrom, TryInto};
 use sqlx::postgres::{PgSslMode, PgConnectOptions};
 
+use tracing::{info, instrument};
+
 
 pub enum Environment {
 
@@ -115,7 +117,10 @@ impl DatabaseSettings {
 
 }
 
+#[instrument]
 pub fn get_configuration() -> Result<Settings, config::ConfigError> {
+
+    info!("Loading configuration");
 
     let mut settings = config::Config::default();
     let base_path = std::env::current_dir().expect("Failed to determine the current directory");

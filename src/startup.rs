@@ -5,6 +5,8 @@ use crate::configuration::CryptoService;
 use sqlx::{postgres::PgPoolOptions, PgPool};
 use std::net::TcpListener;
 use std::sync::Arc;
+use color_eyre::Result;
+use tracing::{info, instrument};
 
 use actix_web::{
 
@@ -27,7 +29,10 @@ pub struct ApplicationBaseUrl(pub String);
 
 impl Application {
 
-    pub async fn build(configuration: Settings) -> Result<Self, std::io::Error> {
+    #[instrument(skip(configuration))]
+    pub async fn build(configuration: Settings) -> Result<Self> {
+
+        info!("--- Building server ---");
 
         let connection_pool = get_connection_pool(&configuration.database)
             .await
@@ -38,9 +43,12 @@ impl Application {
             configuration.application.host, configuration.application.port
         );
 
-        let crypto = get_crypto(configuration.crypto.key, configuration.crypto.token_key);
+        info!("Starting server at http://{}:{}/", 
+            configuration.application.host, 
+            configuration.application.port
+        );
 
-        //println!("-- Secret key is --> {:?}", crypto.key);
+        let crypto = get_crypto(configuration.crypto.key, configuration.crypto.token_key);
 
         let listener = TcpListener::bind(&address)?;
         let port = listener.local_addr().unwrap().port();
@@ -56,12 +64,14 @@ impl Application {
 
     }
 
+    #[instrument(skip(self))]
     pub fn port(&self) -> u16 {
 
         self.port
 
     }
 
+    #[instrument(skip(self))]
     pub async fn run_until_stopped(self) -> Result<(), std::io::Error> {
 
         self.server.await
@@ -70,6 +80,7 @@ impl Application {
 
 }
 
+#[instrument]
 pub async fn get_connection_pool(
     configuration: &DatabaseSettings
 ) -> Result<PgPool, sqlx::Error> {
@@ -81,6 +92,7 @@ pub async fn get_connection_pool(
 
 }
 
+#[instrument]
 pub fn get_crypto(key: String, token_key: String) -> CryptoService {
 
     CryptoService {
@@ -92,6 +104,7 @@ pub fn get_crypto(key: String, token_key: String) -> CryptoService {
 
 }
 
+#[instrument(skip(listener,db_pool,base_url,crypto))]
 pub fn run(
 
     listener: TcpListener, 
@@ -99,7 +112,9 @@ pub fn run(
     base_url: String,
     crypto: CryptoService,
 
-    ) -> Result<Server, std::io::Error> {
+    ) -> Result<Server> {
+
+    info!("Running server");
 
     let db_pool = Data::new(db_pool);
     let crypto = Data::new(crypto);

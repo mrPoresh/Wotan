@@ -14,7 +14,7 @@ pub struct NewUser {
 }
 
 //#[derive(sqlx::FromRow, Serialize)]
-#[derive(Debug)]
+#[derive(Debug, sqlx::FromRow)]
 pub struct User {
 
     pub id: Uuid,

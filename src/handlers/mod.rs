@@ -2,11 +2,16 @@ mod auth;
 mod user;
 mod healthy_check;
 
+use crate::errors::AppError;
+
 use healthy_check::healthy_check;
 use user::create_user;
 
 use actix_web::web;
 use actix_web::HttpResponse;
+
+type AppResult<T> = Result<T, AppError>;
+type AppResponse = AppResult<HttpResponse>;
 
 
 pub fn route_config(config: &mut web::ServiceConfig) {
