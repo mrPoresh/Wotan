@@ -27,7 +27,7 @@ pub async fn create_user(
     match result {
 
         Ok(user) => Ok(HttpResponse::Ok().json(user)),
-        //TOO:DO
+        //TOO:DO -- Rebuild Errors
         Err(error) => {
 
             let pg_error = error

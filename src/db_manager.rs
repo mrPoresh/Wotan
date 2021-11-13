@@ -44,16 +44,8 @@ impl UserService {
 
         info!("--- Saving new user (id) -> {} ---", user_id);
 
-        let token = hashing.generate_jwt(&user_id.to_string().clone(), &new_user.email.clone()).await?;
-
-        info!("---> Test token <--- ---> {}", token);
-
-        let decode_token = hashing.verify_token(&token).await?;
-
-        info!("---> Test token decode <--- ---> {:?}", decode_token);
-
         let user = sqlx::query_as::<_, User>(
-            "insert into users (id, username, email, password_hash) values ($1, $2, $3, $4) returning *",
+            "insert into users (id, username, email, password_hash) values ($1, $2, $3, $4) returning *"
         )
         .bind(user_id)
         .bind(new_user.username)
@@ -63,6 +55,22 @@ impl UserService {
         .await?;
 
         info!("*** Complite saving ***");
+
+        Ok(user)
+
+    }
+
+    pub async fn find_by_email(
+        &self, 
+        email: &str
+    ) -> Result<User> {
+
+        let pool = self.pool.as_ref();
+
+        let user = sqlx::query_as::<_, User>("select * from users where email = $1")
+            .bind(email)
+            .fetch_one(pool)
+            .await?;
 
         Ok(user)
 

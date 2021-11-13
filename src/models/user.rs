@@ -19,7 +19,7 @@ pub struct User {
     #[serde(skip_serializing)]
     pub id: Uuid,
     pub username: Option<String>,
-    pub email: String,
+    pub email: Option<String>,
     //#[serde(skip_serializing)]
     pub password_hash: String,
     pub full_name: Option<String>,
@@ -31,5 +31,13 @@ pub struct User {
     pub active: bool,
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
+
+}
+
+#[derive(Debug, Deserialize)]
+pub struct  LogUser {
+
+    pub email: String,
+    pub password: String,
 
 }

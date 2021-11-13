@@ -6,6 +6,7 @@ use crate::errors::AppError;
 
 use healthy_check::healthy_check;
 use user::create_user;
+use auth::auth;
 
 use actix_web::web;
 use actix_web::HttpResponse;
@@ -19,8 +20,8 @@ pub fn route_config(config: &mut web::ServiceConfig) {
     let healthy_check = web::resource("/healthy").route(web::get().to(healthy_check));
 
     let auth = web::scope("/auth")
-        .service(web::resource("/signup").route(web::post().to(create_user)))
-        .service(web::resource("/signin").to(|| HttpResponse::Ok()));
+        .service(web::resource("/signup").route(web::post().to(create_user)));
+        //.service(web::resource("/signin").route(web::post().to(auth)));
 
     let user = web::scope("/user")
         .service(web::resource("/userInfo").to(|| HttpResponse::Ok()))
