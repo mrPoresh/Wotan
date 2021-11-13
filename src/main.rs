@@ -1,30 +1,34 @@
-use downloaderserv::configuration::get_configuration;
-use downloaderserv::startup::Application;
-use downloaderserv::telemetry::init_subscriber;
+#[macro_use]
+extern crate diesel;
+#[macro_use]
+extern crate serde_derive;
+#[macro_use]
+extern crate log;
 
-use color_eyre::Result;
-use tracing::{info, instrument};
+mod cli_args;
+
+use actix_identity::{CookieIdentityPolicy, IdentityService};
+use actix_web::{App, HttpServer, web};
+use actix_web::middleware::Logger;
 
 
-#[warn(unused_variables)]
 #[actix_web::main]
-#[instrument]
-async fn main() -> Result<()> {
+async fn main() -> std::io::Result<()> {
 
-    //let subscriber = get_subscriber("dws".into(), "into".into());
-    //init_subscriber(subscriber);
+    // Loads the .env file
+    dotenv::dotenv().ok();
+    // Initializes the global logger with an env logger
+    env_logger::init();
 
-    init_subscriber();
+    info!("Wotan is starting now ---> GoodLuck!");
 
-    info!("*** Server is starting now -> GoodLuck ***");
+    // Set configuration
+    let configuration = {
 
-    let configuration = get_configuration().expect("Failed to read configuration.");
+        use structopt::StructOpt;
+        cli_args::Opt::from_args()
 
-    let application = Application::build(configuration).await?;
-
-    info!("*** Server configuration is complite ***");
-
-    application.run_until_stopped().await?;
+    };
 
     Ok(())
 
