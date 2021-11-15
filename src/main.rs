@@ -1,11 +1,14 @@
 //#[macro_use]
 //extern crate diesel;
-//#[macro_use]
-//extern crate serde_derive;
+#[macro_use]
+extern crate serde_derive;
 #[macro_use]
 extern crate log;
 
 mod cli_args;
+mod database;
+mod errors;
+mod user;
 
 use actix_identity::{CookieIdentityPolicy, IdentityService};
 use actix_web::{App, HttpServer, web};
@@ -28,7 +31,7 @@ async fn main() -> std::io::Result<()> {
         cli_args::Opt::from_args()
     };
 
-    // let pool ...
+    let pool = database::pool::establish_connection(cfg.clone());
 
     let adress = (cfg.host.clone(), cfg.port.clone());
 
@@ -36,7 +39,8 @@ async fn main() -> std::io::Result<()> {
     let server = HttpServer::new(move || {
 
         App::new()
-          //.data(pool)
+            // DB conection
+            .data(pool.clone())
             // Clone confuguration
             .data(cfg.clone())
             // Error logging
