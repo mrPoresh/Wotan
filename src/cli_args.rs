@@ -9,8 +9,8 @@ pub(crate) struct Opt {
     #[structopt(short, long, env = "PORT", default_value = "3000")]
     pub port: u16,
 
-    #[structopt(long, env = "DOMAIN", default_value = "localhost")]
-    pub domain: String,
+    #[structopt(long, env = "HOST", default_value = "localhost")]
+    pub host: String,
 
     #[structopt(long, env = "DATABASE_URL")]
     pub database_url: String,
