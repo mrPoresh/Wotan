@@ -9,9 +9,10 @@ mod cli_args;
 mod database;
 mod errors;
 mod user;
+mod schema;
 
 use actix_identity::{CookieIdentityPolicy, IdentityService};
-use actix_web::{App, HttpServer, web};
+use actix_web::{App, HttpServer};
 use actix_web::middleware::Logger;
 
 
@@ -55,6 +56,7 @@ async fn main() -> std::io::Result<()> {
                 .max_age_time(time::Duration::hours(i64::from(cfg.auth_duration_in_hour)))
               //.secure()
             ))
+            .configure(user::route)
 
     })
         .bind(adress)

@@ -3,7 +3,7 @@ set -eo pipefail
 
 DB_USER=${POSTGRES_USER:=postgres}
 DB_PASSWORD="${POSTGRES_PASSWORD:=password}"
-DB_NAME="${POSTGRES_DB:=dow_db}"
+DB_NAME="${POSTGRES_DB:=WotanDB}"
 DB_PORT="${POSTGRES_PORT:=5432}"
 
 if [[ -z "${SKIP_DOCKER}" ]]
@@ -27,9 +27,9 @@ done
 >&2 echo "Postgres is up and running on port ${DB_PORT} - running migrations now!"
 
 export DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@localhost:${DB_PORT}/${DB_NAME}
-#diesel setup
-#diesel migrate run
+diesel setup
+diesel migration run
 
 >&2 echo "Postgres has been migrated, ready to go!"
 
-cargo run
+RUST_LOG=info cargo run

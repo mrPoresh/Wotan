@@ -12,8 +12,8 @@ futures = "0.3.17"          ### For asynchronous programming                    
 
 dotenv = "0.15.0"           ### For enviroment variables from .env
 
-diesel = { version = "1.4.8", features = ["postgres", "uuidv07", "chrono", "r2d2"] }#                   | ---> For DataBase 
-r2d2 = "0.8.9"              ### Generic connection pool                                                 |
+diesel = { version = "1.4.7", features = ["postgres", "uuidv07", "chrono", "r2d2"] }#                   | ---> For DataBase 
+r2d2 = "0.8"                ### Generic connection pool                                                 |
 
 lazy_static = "1.4.0"       ### For declaring lazily evaluated statics
 log = "0.4.14"              ### 1) Logging API and ->                                                   | ---> Tracing
@@ -23,13 +23,14 @@ serde = "1.0"               ### Framework                                       
 serde_derive = "1.0"        ### Macros                                                                  | ---> Serialize / Deserialize
 serde_json = "1.0"          ### Json                                                                    |
 
-rand = "0.8.4"              ### Random                                                                  |
+rand = "0.7.3"              ### Random                                                                  |
 argon2rs = "0.2.5"          ### Password hashing                                                        | ---> Hashing / Tokens
 jsonwebtoken = "7.2.0"      ### JWT                                                                     |
 
-uuid = { version = "=0.7.2", features = ["serde", "v4"] }#                                              |
+uuid = { version = "=0.7", features = ["serde", "v4"] }#                                                |
 time = "0.2.10"#                                                                                        | ---> Default
 chrono = { version = "0.4.19", features = ["serde"] }#                                                  |
 
 structopt = "0.3"           ### Struct for Configurations
 thiserror = "1.0"           ### Errors
+shrinkwraprs = "0.3.0"
